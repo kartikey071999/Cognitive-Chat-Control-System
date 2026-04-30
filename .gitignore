@@ -67,7 +67,7 @@ htmlcov/
 # Environment variables
 # =========================
 .env
-.env.*
+!.env.example
 
 # =========================
 # OS junk

@@ -1,5 +1,5 @@
 from src.config import GEN_DETERMINISTIC
-from src.llm import run_llm
+from src.llm_diff import run_llm
 
 
 # ===================== INTENT =====================
