@@ -1,7 +1,6 @@
 from src.engram.extractor import extract_triples
 from src.engram.ingest import GraphIngestor
 
-
 if __name__ == "__main__":
     text = """
     Kartikey is a backend developer at EXL.

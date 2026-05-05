@@ -2,7 +2,6 @@ import torch
 from PIL import Image
 from src.gemma4.model import processor, model
 
-
 # Max video length: 60 seconds at 1 fps = 60 frames
 MAX_VIDEO_FRAMES = 60
 

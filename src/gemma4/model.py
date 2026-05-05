@@ -1,5 +1,5 @@
 import torch
-from huggingface_hub import snapshot_download, model_info
+from huggingface_hub import snapshot_download
 from transformers import AutoProcessor, AutoModelForCausalLM
 from src.config import MODEL_NAME, HF_TOKEN
 
@@ -7,10 +7,8 @@ from src.config import MODEL_NAME, HF_TOKEN
 def _model_cached(model_name):
     """Check if model is already downloaded locally."""
     try:
-        info = model_info(model_name, token=HF_TOKEN)
-        cache_dir = snapshot_download(
-            model_name, token=HF_TOKEN, local_files_only=True
-        )
+        # info = model_info(model_name, token=HF_TOKEN)
+        cache_dir = snapshot_download(model_name, token=HF_TOKEN, local_files_only=True)
         print(f"✅ Model found in cache: {cache_dir}")
         return True
     except Exception:

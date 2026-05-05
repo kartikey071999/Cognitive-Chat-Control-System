@@ -5,8 +5,7 @@ from src.config import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
 class Neo4jClient:
     def __init__(self, database: str = "neo4j"):
         self.driver = GraphDatabase.driver(
-            NEO4J_URI,
-            auth=(NEO4J_USERNAME, NEO4J_PASSWORD)
+            NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD)
         )
         self.database = database
 
@@ -60,10 +59,7 @@ class Neo4jClient:
         MERGE (n:{label} {{name: $name}})
         SET n += $props
         """
-        self.execute_write(query, {
-            "name": name,
-            "props": properties or {}
-        })
+        self.execute_write(query, {"name": name, "props": properties or {}})
 
     def merge_relationship(
         self,
@@ -72,7 +68,7 @@ class Neo4jClient:
         rel_type: str,
         to_label: str,
         to_name: str,
-        rel_props: dict = None
+        rel_props: dict = None,
     ):
         from_label = from_label or "Entity"
         to_label = to_label or "Entity"
@@ -82,11 +78,10 @@ class Neo4jClient:
         MERGE (a)-[r:{rel_type}]->(b)
         SET r += $props
         """
-        self.execute_write(query, {
-            "from_name": from_name,
-            "to_name": to_name,
-            "props": rel_props or {}
-        })
+        self.execute_write(
+            query,
+            {"from_name": from_name, "to_name": to_name, "props": rel_props or {}},
+        )
 
 
 if __name__ == "__main__":
@@ -94,18 +89,13 @@ if __name__ == "__main__":
 
     print(db.test_connection())
 
-    db.merge_node("Person", "Kartikey", {
-        "role": "Backend Developer",
-        "interest": "AI Agents"
-    })
+    db.merge_node(
+        "Person", "Kartikey", {"role": "Backend Developer", "interest": "AI Agents"}
+    )
 
     db.merge_node("Company", "EXL")
 
-    db.merge_relationship(
-        "Person", "Kartikey",
-        "WORKS_AT",
-        "Company", "EXL"
-    )
+    db.merge_relationship("Person", "Kartikey", "WORKS_AT", "Company", "EXL")
 
     print(db.run_query("MATCH (n) RETURN n LIMIT 5"))
 
