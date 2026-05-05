@@ -5,7 +5,7 @@ from src.engram.schemas import TripleExtraction
 
 class KnowledgeGraph:
     def __init__(self):
-        self.graph = nx.DiGraph()
+        self.graph = nx.MultiDiGraph()
 
     def add_extraction(self, extraction: TripleExtraction):
         for triple in extraction.triples:
@@ -22,9 +22,13 @@ class KnowledgeGraph:
             )
 
     def ingest_chat(self, text: str):
-        extraction = extract_triples(text)
-        self.add_extraction(extraction)
-        return extraction
+        try:
+            extraction = extract_triples(text)
+            self.add_extraction(extraction)
+            return extraction
+        except Exception as e:
+            print(f"[KG] extraction failed: {e}")
+            return None
 
     def get_nodes(self):
         return list(self.graph.nodes(data=True))
