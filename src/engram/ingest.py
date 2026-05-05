@@ -10,16 +10,12 @@ class GraphIngestor:
         for triple in extraction.triples:
             # merge subject
             self.db.merge_node(
-                triple.subject.label,
-                triple.subject.name,
-                triple.subject.properties
+                triple.subject.label, triple.subject.name, triple.subject.properties
             )
 
             # merge object
             self.db.merge_node(
-                triple.object.label,
-                triple.object.name,
-                triple.object.properties
+                triple.object.label, triple.object.name, triple.object.properties
             )
 
             # merge relationship
@@ -29,7 +25,7 @@ class GraphIngestor:
                 triple.relation,
                 triple.object.label,
                 triple.object.name,
-                triple.relation_properties
+                triple.relation_properties,
             )
 
     def close(self):

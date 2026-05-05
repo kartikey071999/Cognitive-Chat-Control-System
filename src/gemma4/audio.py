@@ -2,7 +2,6 @@ import torch
 import librosa
 from src.gemma4.model import processor, model
 
-
 # Max audio length supported by Gemma 4 E4B
 MAX_AUDIO_SECONDS = 30
 
