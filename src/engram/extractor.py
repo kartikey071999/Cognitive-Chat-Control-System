@@ -5,19 +5,19 @@ import re
 
 SYSTEM_PROMPT = """
 Extract knowledge graph triples from text.
-
 Return ONLY valid JSON:
 {"triples":[{"subject":{"label":"","name":"","properties":{}},"relation":"","object":{"label":"","name":"","properties":{}},"relation_properties":{}}]}
-
 Rules:
 - Use only explicit info (no guessing)
 - No extra text
 - No duplicates
 - Consistent naming
-
+STRICT RULES:
+- Output MUST be parseable by json.loads()
+- Do NOT include markdown, backticks, or explanation
+- If unsure, return {"triples":[]}
 Labels:
 Person, Company, City, Country, Skill, Role, Organization, Technology
-
 Relations:
 WORKS_AT, LIVES_IN, HAS_SKILL, LOVES, BUILDS, IS_A
 """
@@ -50,15 +50,30 @@ def normalize_triples(triples):
     return unique
 
 
+def _sanitize_json(text: str) -> str:
+    # Remove trailing commas before } or ]
+    text = re.sub(r",\s*([}\]])", r"\1", text)
+    # Replace single quotes with double quotes (naive but covers common cases)
+    text = text.replace("'", '"')
+    return text
+
+
 def parse_llm_json(content: str):
     try:
         return json.loads(content)
     except json.JSONDecodeError:
-        # extract first valid JSON object
-        match = re.search(r"\{.*\}", content, re.DOTALL)
-        if match:
-            return json.loads(match.group())
-        raise ValueError("No valid JSON found in LLM output")
+        pass
+
+    # extract first valid JSON object
+    match = re.search(r"\{.*\}", content, re.DOTALL)
+    if match:
+        raw = match.group()
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            return json.loads(_sanitize_json(raw))
+
+    raise ValueError("No valid JSON found in LLM output")
 
 
 if __name__ == "__main__":
