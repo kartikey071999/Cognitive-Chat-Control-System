@@ -1,11 +1,14 @@
+import asyncio
+
 from src.llm.chat import chat
+from src.memory import Memory
 from src.engram.graph import KnowledgeGraph
 from src.engram.context import KGContext
 
 
-def main():
+async def main():
     print("Chat (type 'exit' or 'quit' to stop)\n")
-    messages = []
+    memory = Memory()
     kg = KnowledgeGraph()
     ctx = KGContext()
 
@@ -31,21 +34,18 @@ def main():
         # Build system prompt with KG context if available
         system_prompt = None
         if kg_context:
-            print(f"[Context from KG]\n{kg_context}\n")
+            # print(f"[Context from KG]\n{kg_context}\n")
             system_prompt = f"Use this context from memory:\n{kg_context}"
 
-        messages.append({"role": "user", "content": user_input})
+        await memory.add("user", user_input)
+        messages = memory.get()
         print("AI: ", end="", flush=True)
         response = chat(messages, system_prompt=system_prompt, stream=True)
-        messages.append({"role": "assistant", "content": response})
+        await memory.add("assistant", response)
 
         # Enrich KG with the conversation turn
         kg.ingest_chat(f"{user_input}\n{response}")
-        # print(f"\n[KG] {kg}")
-        # for node, data in kg.get_nodes():
-        #     print(f"  - {node} ({data.get('label', '?')})")
-        # print()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
