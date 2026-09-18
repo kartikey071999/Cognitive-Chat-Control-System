@@ -1,6 +1,6 @@
 # Cognitive Chat Control System
 
-A sophisticated AI assistant (conceptually powered by GPT-2 for demonstration) that features emotional state tracking, intent recognition, and long-term memory management.
+A sophisticated AI assistant that features emotional state tracking, intent recognition, and long-term memory management.
 
 ## 🧠 Features
 
