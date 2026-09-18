@@ -11,6 +11,7 @@ NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD", "")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 LLM_API_KEY = os.environ.get("LLM_API_KEY")
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL")
+CHAT_LLM_MODEL = os.environ.get("CHAT_LLM_MODEL", "gpt-4o-mini")
 
 # ===================== CONFIG =====================
 MODEL_NAME = "google/gemma-4-E4B-it"
